@@ -1,13 +1,30 @@
 import { Request, Response } from 'express'
 import { prisma } from '../../config/db'
 import jwt from 'jsonwebtoken'
+import { sendOTPEmail } from '../../utils/mailer'
 
-// Basic mock function to "send" OTP
+// Basic mock function for SMS, real nodemailer for email
 const sendOTP = async (contact: string, otp: string) => {
-  console.log(`\n\n=== 🔐 MOCK OTP DISPATCH ===`)
-  console.log(`Sending to: ${contact}`)
-  console.log(`OTP Code: ${otp}`)
-  console.log(`==============================\n\n`)
+  const isEmail = contact.includes('@')
+  
+  if (isEmail) {
+    try {
+      await sendOTPEmail(contact, otp)
+    } catch (error) {
+      console.error('Failed to send OTP email, falling back to console mock:', error)
+      // Log for fallback/dev
+      console.log(`\n\n=== 🔐 MOCK OTP EMAIL FALLBACK ===`)
+      console.log(`Sending to: ${contact}`)
+      console.log(`OTP Code: ${otp}`)
+      console.log(`==============================\n\n`)
+    }
+  } else {
+    // SMS mock
+    console.log(`\n\n=== 🔐 MOCK OTP SMS DISPATCH ===`)
+    console.log(`Sending to: ${contact}`)
+    console.log(`OTP Code: ${otp}`)
+    console.log(`==============================\n\n`)
+  }
 }
 
 export const requestOtp = async (req: Request, res: Response) => {

@@ -13,4 +13,11 @@ export const env = {
     PAY_ITEM_ID: process.env.INTERSWITCH_PAY_ITEM_ID || '',
     MERCHANT_CODE: process.env.INTERSWITCH_MERCHANT_CODE || '',
   },
+  MAIL: {
+    HOST: process.env.SMTP_HOST || 'smtp.gmail.com',
+    PORT: Number(process.env.SMTP_PORT) || 587,
+    USER: process.env.SMTP_USER || '',
+    PASS: process.env.SMTP_PASS || '',
+    FROM: process.env.SMTP_FROM || 'CareBridge <no-reply@carebridge.app>',
+  },
 };

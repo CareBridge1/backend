@@ -5,7 +5,7 @@ import { verifyPayment } from '../../integrations/interswitch';
 export const handleInterswitchWebhook = async (req: Request, res: Response): Promise<void> => {
   try {
     // Interswitch sends transaction state in the body
-    const { transactionReference, amount, responseCode } = req.body;
+    const { transactionReference } = req.body;
 
     if (!transactionReference) {
       res.status(400).json({ message: 'Transaction reference missing' });
@@ -31,7 +31,7 @@ export const handleInterswitchWebhook = async (req: Request, res: Response): Pro
     const result = await verifyPayment(transactionReference, transaction.amount);
     const isSuccess = result.status === 'successful';
 
-    const updatedTransaction = await prisma.transaction.update({
+    await prisma.transaction.update({
       where: { transactionRef: transactionReference },
       data: { status: isSuccess ? 'SUCCESS' : 'FAILED' },
     });
@@ -41,7 +41,7 @@ export const handleInterswitchWebhook = async (req: Request, res: Response): Pro
         where: { paymentLinkId: transaction.paymentLinkId, status: 'SUCCESS' },
       });
 
-      const totalPaid = allTransactions.reduce((sum, t) => sum + t.amount, 0);
+      const totalPaid = allTransactions.reduce((sum: number, t: any) => sum + t.amount, 0);
       const newStatus = totalPaid >= transaction.paymentLink.amount ? 'PAID' : 'PARTIAL';
 
       await prisma.paymentLink.update({
@@ -99,7 +99,7 @@ export const verifyTransaction = async (req: Request, res: Response): Promise<vo
         },
       });
 
-      const totalPaid = allTransactions.reduce((sum, t) => sum + t.amount, 0);
+      const totalPaid = allTransactions.reduce((sum: number, t: any) => sum + t.amount, 0);
       const newStatus =
         totalPaid >= transaction.paymentLink.amount
           ? 'PAID'

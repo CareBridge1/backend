@@ -2,12 +2,6 @@ import axios from 'axios';
 import { env } from '../config/env';
 import { generateRef } from '../utils/generateRef';
 
-interface InterswitchTokenResponse {
-  access_token: string;
-  token_type: string;
-  expires_in: number;
-}
-
 import crypto from 'crypto';
 
 interface InterswitchPaymentInitResponse {
@@ -90,10 +84,10 @@ export const verifyPayment = async (
     };
   }
 
-  // Also fix verification array response check 
-  // For WebPay, verification usually hits /api/v2/quickteller/transactions?site_redirect_url doesn't match E42
+  // WebPay verification usually hits /api/v2/quickteller/transactions
   // We'll use the WebPay transaction polling endpoint:
   try {
+    const amountInKobo = Math.round(amount * 100);
     const response = await axios.get(
       `${env.INTERSWITCH.BASE_URL}/collections/api/v1/gettransaction.json?merchantcode=${env.INTERSWITCH.MERCHANT_CODE}&transactionreference=${transactionRef}&amount=${amountInKobo}`
     );

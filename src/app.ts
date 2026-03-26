@@ -12,7 +12,7 @@ const app = express();
 // CORS
 app.use(
   cors({
-    origin: [env.FRONTEND_URL, 'http://localhost:5173', 'http://localhost:3000', 'http://localhost:5800'],
+    origin: [env.FRONTEND_URL, 'http://localhost:5173', 'http://localhost:3000', 'http://localhost:5800','https://care-now-pay-later.vercel.app'],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
