@@ -23,6 +23,25 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Root route - Project Details
+app.get('/', (_req, res) => {
+  res.json({
+    name: 'CareBridge',
+    description: 'Empowering healthcare through flexible payment solutions.',
+    version: '1.0.0',
+    status: 'online',
+    author: 'CareBridge Team',
+    documentation: 'https://github.com/CareBridge1/backend#readme',
+    health: '/health',
+    endpoints: {
+      auth: '/api/auth',
+      payment_links: '/api/payment-links',
+      transactions: '/api/transactions',
+      patients: '/api/patients',
+    },
+  });
+});
+
 // Health check
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok', service: 'CareNow PayLater API', version: '1.0.0' });
