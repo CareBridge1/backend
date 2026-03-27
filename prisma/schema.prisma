@@ -24,8 +24,10 @@ model User {
 
 model PaymentLink {
   id           String        @id @default(uuid())
-  amount       Float
-  description  String?
+  amount            Float
+  duration          Int           @default(1)
+  installmentAmount Float?        @map("installment_amount")
+  description       String?
   status       LinkStatus    @default(PENDING)
   createdAt    DateTime      @default(now()) @map("created_at")
   updatedAt    DateTime      @updatedAt @map("updated_at")

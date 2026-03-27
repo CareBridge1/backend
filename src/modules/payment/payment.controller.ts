@@ -5,7 +5,7 @@ import { AuthRequest } from '../../middleware/auth.middleware';
 
 export const createPaymentLink = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const { amount, patientContact, patientName, description } = req.body;
+    const { amount, patientContact, patientName, description, duration, installmentAmount } = req.body;
 
     if (!amount || isNaN(Number(amount)) || Number(amount) <= 0) {
       res.status(400).json({ message: 'Valid amount is required' });
@@ -41,6 +41,8 @@ export const createPaymentLink = async (req: AuthRequest, res: Response): Promis
     const paymentLink = await prisma.paymentLink.create({
       data: {
         amount: Number(amount),
+        duration: duration ? Number(duration) : 1,
+        installmentAmount: installmentAmount ? Number(installmentAmount) : null,
         description: description || null,
         userId: req.userId!,
         patientId: patient.id,
@@ -58,6 +60,8 @@ export const createPaymentLink = async (req: AuthRequest, res: Response): Promis
       paymentLink: {
         id: paymentLink.id,
         amount: paymentLink.amount,
+        duration: paymentLink.duration,
+        installmentAmount: paymentLink.installmentAmount,
         patientName: paymentLink.patient.name,
         patientContact: paymentLink.patient.phone || paymentLink.patient.email,
         description: paymentLink.description,
@@ -88,6 +92,8 @@ export const getPaymentLinks = async (req: AuthRequest, res: Response): Promise<
     const result = links.map((link: any) => ({
       id: link.id,
       amount: link.amount,
+      duration: link.duration,
+      installmentAmount: link.installmentAmount,
       patientName: link.patient?.name,
       patientContact: link.patient?.phone || link.patient?.email,
       description: link.description,
@@ -132,6 +138,8 @@ export const getPaymentLinkById = async (req: Request, res: Response): Promise<v
     res.json({
       id: link.id,
       amount: link.amount,
+      duration: link.duration,
+      installmentAmount: link.installmentAmount,
       patientName: link.patient?.name,
       patientContact: link.patient?.phone || link.patient?.email,
       description: link.description,

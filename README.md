@@ -54,3 +54,10 @@ Server runs on `http://localhost:4000`
 The app runs in **demo mode** when `INTERSWITCH_CLIENT_ID` is not set. In demo mode, payments are simulated with mock URLs.
 
 For production, configure your Interswitch credentials from the [Developer Portal](https://sandbox.interswitchng.com).
+
+## Contributors
+
+*   **Ahmad Ismail** - Full Stack Engineer
+*   **Ikhahon Robinson Osamhanhiemen** - UI/UX Designer
+*   **IGHEDOSA PROMISE IRIOBOSA** - Frontend Engineer
+*   **AMUNE VICTOR EFI** - Frontend Engineer
